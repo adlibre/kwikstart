@@ -2,7 +2,7 @@
 #
 # Install Redmine 2.0 w/ MySQL, Nginx (w/ Thin) on CentOS 6
 #
-# Assumes the host is clean unconfigured CentOS 6
+# Assumes the host is clean unconfigured CentOS 6. Should be idempotent.
 #
 # Adlibre Pty Ltd 2012
 #
@@ -66,8 +66,8 @@ EOF
 rake generate_secret_token
 rake db:migrate RAILS_ENV="production" # create database
 # fix permissions
-chown -R ${DEST} root
-mkdir public/plugin_assets # make missing dir
+chown -R root ${DEST}
+mkdir -p public/plugin_assets # make missing dir
 chown -R ${USER}:${USER} files log tmp public/plugin_assets
 chmod -R 755 files log tmp public/plugin_assets
 
@@ -84,7 +84,7 @@ cat > /etc/nginx/conf.d/redmine.conf << EOF
 
     server {
         server_name ${SERVER_NAME};
-        root ${DEST};
+        root ${DEST}/public;
 
         location / {
             try_files \$uri @ruby;
