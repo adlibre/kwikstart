@@ -18,7 +18,11 @@ DB_USER='redmine'
 DB_PASS=`tr -cd "[:alnum:]" < /dev/urandom | head -c 10` # 10 char random password
 DB_NAME='redmine'
 SERVERS=3
-LOGFILE='install.log' # TODO
+LOGFILE='install.log'
+
+echo "### Beginning install of Redmine ###"
+
+( # Start log capture
 
 ## Start
 # Install EPEL Package Source
@@ -63,6 +67,7 @@ rake generate_secret_token
 rake db:migrate RAILS_ENV="production" # create database
 # fix permissions
 chown -R ${DEST} root
+mkdir public/plugin_assets # make missing dir
 chown -R ${USER}:${USER} files log tmp public/plugin_assets
 chmod -R 755 files log tmp public/plugin_assets
 
@@ -106,3 +111,7 @@ chkconfig thin on
 # Start
 service thin start
 service nginx start
+
+) 2>&1 1>> ${LOGFILE} | tee -a ${LOGFILE} # stderr to console, stdout&stderr to logfile
+
+echo "### Install of Redmine complete ###"
