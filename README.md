@@ -4,3 +4,4 @@ Here we have a collection of application Installers for Red Hat, CentOS, Scienti
 
 These configurations are a quick starting point to get you up and running in a hurry.
 
+They're simple bash scripts. Download. Run. Install. Enjoy!
