@@ -66,7 +66,8 @@ EOF
 rake generate_secret_token
 rake db:migrate RAILS_ENV="production" # create database
 # fix permissions
-chown -R root ${DEST}
+chown -R root:root ${DEST}
+chmod 755 ${DEST}
 mkdir -p public/plugin_assets # make missing dir
 chown -R ${USER}:${USER} files log tmp public/plugin_assets
 chmod -R 755 files log tmp public/plugin_assets
@@ -104,7 +105,7 @@ EOF
 # Install & Configure Thin
 yum install rubygem-thin
 mkdir -p /etc/thin/
-thin config -C /etc/thin/redmine.yml -c ${DEST} --servers ${SERVERS} -e production -u ${USER} -p 8000
+thin config -C /etc/thin/redmine.yml -c ${DEST} --servers ${SERVERS} -e production -u ${USER} -g ${USER} -p 8000
 thin install
 chkconfig thin on
 
