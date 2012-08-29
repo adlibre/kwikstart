@@ -2,7 +2,7 @@
 #
 # Setup Lighttpd w/ APC for Wordpress
 #
-# Assumes the host is clean unconfigured CentOS 6 / EL 6 derivatives. Should be idempotent.
+# Assumes the host is clean unconfigured CentOS 6 / EL 6 derivatives (inc Amazon Linux AMI). Should be idempotent.
 #
 # Adlibre Pty Ltd 2012
 #
@@ -91,7 +91,7 @@ cat > //etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
             #
             
             # Exclude some directories from rewriting
-            "^/(wp-admin|wp-includes|wp-content)/(.*)" => "\$0",
+            "^/(wp-admin|wp-includes|wp-content)(.*)" => "\$0",
             
             # Pass all to handler
             "^/(.*)$" => "/index.php/\$1"
@@ -110,9 +110,14 @@ cat > //etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
     }
 EOF
 
+# Configure PHP
+cp -n /etc/php.ini /etc/php.ini.orig # backup
+sed -i -e "s@^short_open_tag.*@short_open_tag = On@g" /etc/php.ini # Some plugins need this
+sed -i -e "s@^zlib.output_compression.*@zlib.output_compression = On@g" /etc/php.ini
+
 # Configure APC
 cp -n /etc/php.d/apc.ini /etc/php.d/apc.ini.orig # backup
-sed -i -e "s@^apc.shm_size.*@apc.shm_size=${APC_SHM_SIZE}@g" /etc/php.d/apc.ini
+sed -i -e "s@^apc.shm_size=.*@apc.shm_size=${APC_SHM_SIZE}@g" /etc/php.d/apc.ini
 sed -i -e "s@^apc.ttl=.*@apc.ttl=${APC_TTL}@g" /etc/php.d/apc.ini
 sed -i -e "s@^apc.user_ttl=.*@apc.user_ttl=${APC_USER_TTL}@g" /etc/php.d/apc.ini
 sed -i -e "s@^apc.gc_ttl=.*@apc.gc_ttl=${APC_GC_TTL}@g" /etc/php.d/apc.ini
