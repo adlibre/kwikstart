@@ -103,7 +103,7 @@ cat > /etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
         # Allow caching of static assets
         expire.url = (
             "^(wp-includes|wp-content)/(.*)" => "access 7 days",
-            "^(.*).(js|css|png|jpg|jpeg|gif|ico|mp3|flv) => "access 7 days",
+            "^(.*).(js|css|png|jpg|jpeg|gif|ico|mp3|flv)" => "access 7 days",
         )
         
         server.error-handler-404 = "/index.php"
