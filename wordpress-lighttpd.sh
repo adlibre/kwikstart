@@ -47,6 +47,7 @@ cp -n /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.orig # backup
 sed -i -e 's@#  "mod_alias",@  "mod_alias",@g' /etc/lighttpd/modules.conf
 sed -i -e 's@#  "mod_redirect",@  "mod_redirect",@g' /etc/lighttpd/modules.conf
 sed -i -e 's@#  "mod_rewrite",@  "mod_rewrite",@g' /etc/lighttpd/modules.conf
+sed -i -e 's@#  "mod_expire",@  "mod_expire",@g' /etc/lighttpd/modules.conf
 # enable lighttpd features
 sed -i -e 's@#include "conf.d/compress.conf"@include "conf.d/compress.conf"@g' /etc/lighttpd/modules.conf
 sed -i -e 's@#include "conf.d/fastcgi.conf"@include "conf.d/fastcgi.conf"@g' /etc/lighttpd/modules.conf
@@ -63,13 +64,11 @@ cat > //etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
     }
     
     $HTTP["host"] =~ "^www.${SERVER_NAME}" {
-    
+        
         server.name = "${SERVER_NAME}"
         server.document-root = "${WWW_ROOT}"
-    
-        # Compress output
-        compress.filetype = ("application/x-javascript", "application/javascript", "text/javascript", "text/x-js", "text/css", "text/html", "text/plain")
-    
+        
+        # PHP FCGI Server
         fastcgi.server = ( ".php" =>
             ( "php" =>
                 (
@@ -84,21 +83,30 @@ cat > //etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
                 )
             ),
         )
-    
+        
+        # Send Requests to appropriate handler
         url.rewrite-if-not-file = (
             #
             # Wordpress Standard Rewrites
             #
-    
+            
             # Exclude some directories from rewriting
             "^/(wp-admin|wp-includes|wp-content)/(.*)" => "\$0",
-    
+            
             # Pass all to handler
             "^/(.*)$" => "/index.php/\$1"
         )
-    
+        
+        # Compress output by type
+        compress.filetype = ("application/x-javascript", "application/javascript", "text/javascript", "text/x-js", "text/css", "text/html", "text/plain")
+        
+        # Allow caching of static assets
+        expire.url = (
+            "^(wp-includes|wp-content)/(.*)" => "access 7 days",
+            "^(.*).(js|css|png|jpg|jpeg|gif|ico|mp3|flv) => "access 7 days",
+        )
+        
         server.error-handler-404 = "/index.php"
-    
     }
 EOF
 
