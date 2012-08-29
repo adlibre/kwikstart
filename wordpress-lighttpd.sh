@@ -59,11 +59,11 @@ cat > /etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
     # Wordpress Lighttpd Config for ${SERVER_NAME}
     
     # Redirect naked domain to www
-    $HTTP["host"] != "^(www.${SERVER_NAME})" {
+    \$HTTP["host"] != "^(www.${SERVER_NAME})" {
         url.redirect = ( "^/(.*)" => "http://www.${SERVER_NAME}/$1" )
     }
     
-    $HTTP["host"] =~ "^www.${SERVER_NAME}" {
+    \$HTTP["host"] =~ "^www.${SERVER_NAME}" {
         
         server.name = "${SERVER_NAME}"
         server.document-root = "${WWW_ROOT}"
