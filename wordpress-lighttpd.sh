@@ -47,15 +47,15 @@ cp -n /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.orig # backup
 sed -i -e 's@#  "mod_alias",@  "mod_alias",@g' /etc/lighttpd/modules.conf
 sed -i -e 's@#  "mod_redirect",@  "mod_redirect",@g' /etc/lighttpd/modules.conf
 sed -i -e 's@#  "mod_rewrite",@  "mod_rewrite",@g' /etc/lighttpd/modules.conf
-sed -i -e 's@#  "mod_expire",@  "mod_expire",@g' /etc/lighttpd/modules.conf
 # enable lighttpd features
 sed -i -e 's@#include "conf.d/compress.conf"@include "conf.d/compress.conf"@g' /etc/lighttpd/modules.conf
 sed -i -e 's@#include "conf.d/fastcgi.conf"@include "conf.d/fastcgi.conf"@g' /etc/lighttpd/modules.conf
+sed -i -e 's@#include "conf.d/expire.conf"@include "conf.d/expire.conf"@g' /etc/lighttpd/modules.conf
 # enable vhost includes
 sed -i -e 's@#include_shell "cat /etc/lighttpd/vhosts.d/*.conf"@include_shell "cat /etc/lighttpd/vhosts.d/*.conf"@g' /etc/lighttpd/lighttpd.conf
 
 # Configure Lighttpd vhost
-cat > //etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
+cat > /etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
     # Wordpress Lighttpd Config for ${SERVER_NAME}
     
     # Redirect naked domain to www
