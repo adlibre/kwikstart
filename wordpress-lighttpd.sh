@@ -19,6 +19,7 @@ PHP_FCGI_CHILDREN=8
 PHP_FCGI_MAX_REQUESTS=1000
 
 ## Constants
+ARCH=`uname -m`
 LOGFILE='install.log'
 
 echo "### Beginning Install ###"
@@ -26,9 +27,11 @@ echo "### Beginning Install ###"
 ( # Start log capture
 
 ## Start
+# Install EPEL Package Source
+rpm -Uvh http://download.fedoraproject.org/pub/epel/6/${ARCH}/epel-release-6-7.noarch.rpm
 
 # Install base packages
-yum -y install lighttpd-fastcgi php php-mysql php-gd php-xml php-pecl-apc
+yum -y install lighttpd lighttpd-fastcgi php php-mysql php-gd php-xml php-pecl-apc
 
 # Configure Lighttpd Permissions
 mkdir -p /var/cache/lighttpd/compress /var/run/lighttpd
