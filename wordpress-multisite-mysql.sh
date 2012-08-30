@@ -42,8 +42,8 @@ service mysqld restart
 
 # **sigh** http://bugs.mysql.com/bug.php?id=53796
 yum -y install expect
-echo "current pass $DB_ROOT_PASS_CURRENT"
-cat | /usr/bin/expect << EOF
+# Use temp file for expect script (won't terminate when run from sub shell)
+cat > /tmp/$$.expect << EOF
     spawn /usr/bin/mysql_secure_installation
     
     expect "Enter current password for root (enter for none):"
@@ -72,9 +72,11 @@ cat | /usr/bin/expect << EOF
     
     expect "Thanks for using MySQL!"
     puts "Ended expect script."
-    close
-
+    expect eof
+    exit
 EOF
+expect /tmp/$$.expect
+rm -f /tmp/$$.expect
 
 # Configure MySQL for Wordpress Multisite usage
 cp -n /etc/my.cnf /etc/my.cnf.orig # backup
