@@ -28,7 +28,7 @@ if [ ! -f ${ROOT_PASS_FILE} ]; then
     DB_ROOT_PASS_CURRENT=''
 else
     DB_ROOT_PASS=`cat ${ROOT_PASS_FILE}`
-    DB_ROOT_PASS_CURRENT=$DB_ROOT_PASS # Assume it was changed after insall
+    DB_ROOT_PASS_CURRENT=$DB_ROOT_PASS # Assume it was changed after install
 fi
 
 # Install base packages
