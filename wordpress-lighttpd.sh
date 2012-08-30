@@ -55,7 +55,7 @@ sed -i -e 's@#include "conf.d/compress.conf"@include "conf.d/compress.conf"@g' /
 sed -i -e 's@#include "conf.d/fastcgi.conf"@include "conf.d/fastcgi.conf"@g' /etc/lighttpd/modules.conf
 sed -i -e 's@#include "conf.d/expire.conf"@include "conf.d/expire.conf"@g' /etc/lighttpd/modules.conf
 # enable vhost includes
-sed -i -e 's@#include_shell "cat /etc/lighttpd/vhosts.d/*.conf"@include_shell "cat /etc/lighttpd/vhosts.d/*.conf"@g' /etc/lighttpd/lighttpd.conf
+sed -i -e 's@#include_shell "cat /etc/lighttpd/vhosts.d/\*.conf"@include_shell "cat /etc/lighttpd/vhosts.d/\*.conf"@g' /etc/lighttpd/lighttpd.conf
 
 # Configure Lighttpd vhost
 cat > /etc/lighttpd/vhosts.d/${SERVER_NAME}-wordpress.conf << EOF
