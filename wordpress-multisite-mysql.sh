@@ -23,10 +23,12 @@ echo "### Beginning Install ###"
 if [ ! -f ${ROOT_PASS_FILE} ]; then
     DB_ROOT_PASS=`tr -cd "[:alnum:]" < /dev/urandom | head -c 10` # 10 char random password
     touch ${ROOT_PASS_FILE}
-    chmod 700 ${ROOT_PASS_FILE}
+    chmod 600 ${ROOT_PASS_FILE}
     echo ${DB_ROOT_PASS} > ${ROOT_PASS_FILE}
+    DB_ROOT_PASS_CURRENT=''
 else
     DB_ROOT_PASS=`cat ${ROOT_PASS_FILE}`
+    DB_ROOT_PASS_CURRENT=$DB_ROOT_PASS # Assume it was changed after insall
 fi
 
 # Install base packages
@@ -39,14 +41,16 @@ chkconfig mysqld on
 service mysqld restart
 
 # **sigh** http://bugs.mysql.com/bug.php?id=53796
+yum -y install expect
+echo "current pass $DB_ROOT_PASS_CURRENT"
 cat | /usr/bin/expect << EOF
     spawn /usr/bin/mysql_secure_installation
     
     expect "Enter current password for root (enter for none):"
-    send "\r"
-        
-    expect "Set root password?"
-    send "y\r"
+    send "${DB_ROOT_PASS_CURRENT}\r"
+
+    expect -re "Set root password?|Change the root password?"
+    send "Y\r"
     
     expect "New password:"
     send "${DB_ROOT_PASS}\r"
@@ -55,18 +59,20 @@ cat | /usr/bin/expect << EOF
     send "${DB_ROOT_PASS}\r"
     
     expect "Remove anonymous users?"
-    send "y\r"
+    send "Y\r"
     
     expect "Disallow root login remotely?"
-    send "y\r"
+    send "Y\r"
     
     expect "Remove test database and access to it?"
-    send "y\r"
+    send "Y\r"
     
     expect "Reload privilege tables now?"
-    send "y\r"
+    send "Y\r"
     
+    expect "Thanks for using MySQL!"
     puts "Ended expect script."
+    close
 
 EOF
 
