@@ -83,14 +83,14 @@ cp -n /etc/my.cnf /etc/my.cnf.orig # backup
 
 # TODO: This config needs some generalisation. And should configure it's size based on host memory setting.
 cat > /etc/my.cnf << EOF
-# The MySQL server
+# The MySQL server configuration
 [mysqld]
-datadir=/var/lib/mysql
-port=3306
-socket=/var/lib/mysql/mysql.sock
-user=mysql
+datadir = /var/lib/mysql
+port = 3306
+socket = /var/lib/mysql/mysql.sock
+user = mysql
 # Disabling symbolic-links is recommended to prevent assorted security risks
-symbolic-links=0
+symbolic-links = 0
 
 key_buffer_size = 512M
 max_allowed_packet = 8M
@@ -103,12 +103,12 @@ thread_cache_size = 8
 query_cache_size = 32M
 
 # Multisite important config
-table_cache=16384
-table_definition_cache=16384
+table_cache = 16384
+table_definition_cache = 16384
 
 [mysqld_safe]
-log-error=/var/log/mysqld.log
-pid-file=/var/run/mysqld/mysqld.pid
+log-error = /var/log/mysqld.log
+pid-file = /var/run/mysqld/mysqld.pid
 EOF
 
 # Start / Restart
