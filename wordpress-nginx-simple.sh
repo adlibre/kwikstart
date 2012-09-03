@@ -51,9 +51,9 @@ cat > /etc/nginx/conf.d/${SERVER_NAME}-wordpress.conf << EOF
         index   index.php index.html index.htm;
         
         # Redirect to naked domain
-        if ($host ~* www\.(.*)) {
-            set $host_without_www $1;
-            rewrite ^/(.*)$ $scheme://$host_without_www/$1 permanent;
+        if (\$host ~* www\.(.*)) {
+            set \$host_without_www \$1;
+            rewrite ^/(.*)$ \$scheme://\$host_without_www/\$1 permanent;
         }
         
         # Output compression
@@ -69,7 +69,7 @@ cat > /etc/nginx/conf.d/${SERVER_NAME}-wordpress.conf << EOF
         # WPMS theme, plugin and other static content 
         location ~* ^.+\.(css|ico|js|png|gif|jpg|jpeg)$ {
             # WPMS File Handling
-            rewrite ^.*/files/(.*) /wp-includes/ms-files.php?file=$1 last;
+            rewrite ^.*/files/(.*) /wp-includes/ms-files.php?file=\$1 last;
             access_log off;
             expires max;
         }
@@ -78,43 +78,43 @@ cat > /etc/nginx/conf.d/${SERVER_NAME}-wordpress.conf << EOF
         location / {
             
             # WPMS File Handling
-            rewrite ^.*/files/(.*) /wp-includes/ms-files.php?file=$1 last;
+            rewrite ^.*/files/(.*) /wp-includes/ms-files.php?file=\$1 last;
             
             # if the requested file exists, return it immediately
-            if (-f $request_filename) {
+            if (-f \$request_filename) {
                 break;
             }
             
             ## W3 Total CACHE BEGIN
-            set $totalcache_file '';
-            set $totalcache_uri $request_uri;
+            set \$totalcache_file '';
+            set \$totalcache_uri \$request_uri;
             
-            if ($request_method = POST) {
-                set $totalcache_uri '';
+            if (\$request_method = POST) {
+                set \$totalcache_uri '';
             }
             
             # Using pretty permalinks, so bypass the cache for any query string
-            if ($query_string) {
-                set $totalcache_uri '';
+            if (\$query_string) {
+                set \$totalcache_uri '';
             }
             
-            if ($http_cookie ~* "comment_author_|wordpress|wp-postpass_" ) {
-                set $totalcache_uri '';
+            if (\$http_cookie ~* "comment_author_|wordpress|wp-postpass_" ) {
+                set \$totalcache_uri '';
             }
             
             # if we haven't bypassed the cache, specify our totalcache file
-            if ($totalcache_uri ~ ^(.+)$) {
-                set $totalcache_file /wp-content/w3tc-$http_host/pgcache/$1/_default_.html;
+            if (\$totalcache_uri ~ ^(.+)$) {
+                set \$totalcache_file /wp-content/w3tc-\$http_host/pgcache/\$1/_default_.html;
             }
             
             # only rewrite to the totalcache file if it actually exists
-            if (-f $document_root$totalcache_file) {
-                rewrite ^(.*)$ $totalcache_file break;
+            if (-f \$document_root\$totalcache_file) {
+                rewrite ^(.*)$ \$totalcache_file break;
             }                 
             ## W3 Total CACHE END
             
             # all other requests go to WordPress
-            if (!-e $request_filename) {
+            if (!-e \$request_filename) {
                 rewrite . /index.php last;
             }
         }
@@ -130,7 +130,7 @@ cat > /etc/nginx/conf.d/${SERVER_NAME}-wordpress.conf << EOF
             include /etc/nginx/fastcgi_params;
             fastcgi_pass  127.0.0.1:9000;
             fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
             fastcgi_read_timeout 300; # increase timeout since our mysql is on different servers
         }
         
