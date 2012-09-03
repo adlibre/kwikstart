@@ -35,18 +35,23 @@ yum -y install nginx spawn-fcgi php php-mysql php-gd php-xml php-pecl-apc
 mkdir -p ${WWW_ROOT}
 
 # turn on services
+chkconfig spawn-fcgi on
 chkconfig nginx on
 
-# Configure Nginx base config
+# Configure Spawn-FCGI
+cp -n /etc/sysconfig/spawn-fcgi /etc/sysconfig/spawn-fcgi.orig # backup
+cat > /etc/sysconfig/spawn-fcgi << EOF
+OPTIONS="-u nginx -g nginx -p 9000 -C ${PHP_FCGI_CHILDREN} -F 1  -P /var/run/spawn-fcgi.pid -- PHP_FCGI_MAX_REQUESTS=${PHP_FCGI_MAX_REQUESTS} /usr/bin/php-cgi"
+EOF
 
-# Configure Nginx  vhost
+# Configure Nginx vhost
 cat > /etc/nginx/conf.d/${SERVER_NAME}-wordpress.conf << EOF
     # Wordpress Nginx Config for ${SERVER_NAME}
     
     server {
         listen  80  default;
         server_name_in_redirect off;
-        server_name ${SERVER_NAME}
+        server_name ${SERVER_NAME};
         root    ${WWW_ROOT};
         index   index.php index.html index.htm;
         
@@ -155,6 +160,7 @@ sed -i -e "s@^apc.user_ttl=.*@apc.user_ttl=${APC_USER_TTL}@g" /etc/php.d/apc.ini
 sed -i -e "s@^apc.gc_ttl=.*@apc.gc_ttl=${APC_GC_TTL}@g" /etc/php.d/apc.ini
 
 # Start / Restart
+service spawn-fcgi restart
 service nginx restart
 
 ) 2>&1 1>> ${LOGFILE} | tee -a ${LOGFILE} # stderr to console, stdout&stderr to logfile
