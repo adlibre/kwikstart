@@ -41,7 +41,8 @@ chkconfig nginx on
 # Configure Spawn-FCGI
 cp -n /etc/sysconfig/spawn-fcgi /etc/sysconfig/spawn-fcgi.orig # backup
 cat > /etc/sysconfig/spawn-fcgi << EOF
-OPTIONS="-u nginx -g nginx -p 9000 -C ${PHP_FCGI_CHILDREN} -F 1  -P /var/run/spawn-fcgi.pid -- PHP_FCGI_MAX_REQUESTS=${PHP_FCGI_MAX_REQUESTS} /usr/bin/php-cgi"
+export PHP_FCGI_MAX_REQUESTS=${PHP_FCGI_MAX_REQUESTS}
+OPTIONS="-u nginx -g nginx -p 9000 -C ${PHP_FCGI_CHILDREN} -F 1  -P /var/run/spawn-fcgi.pid -- /usr/bin/php-cgi"
 EOF
 
 # Configure Nginx vhost
