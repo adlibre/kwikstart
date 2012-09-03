@@ -115,7 +115,7 @@ EOF
 # Configure PHP
 cp -n /etc/php.ini /etc/php.ini.orig # backup
 sed -i -e "s@^short_open_tag.*@short_open_tag = On@g" /etc/php.ini # Some plugins need this
-sed -i -e "s@^zlib.output_compression.*@zlib.output_compression = On@g" /etc/php.ini
+sed -i -e "s@^zlib.output_compression.*@zlib.output_compression = Off@g" /etc/php.ini # Turn this off if W3 Total Cache / Lighttpd is handing compression
 
 # Configure APC
 cp -n /etc/php.d/apc.ini /etc/php.d/apc.ini.orig # backup
