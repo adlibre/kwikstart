@@ -13,20 +13,19 @@ DEST='/srv/www/redmine'
 SERVER_NAME=`hostname`
 
 ## Constants
-ARCH=`uname -m`
 DB_USER='redmine'
 DB_PASS=`tr -cd "[:alnum:]" < /dev/urandom | head -c 10` # 10 char random password
 DB_NAME='redmine'
 SERVERS=3
 LOGFILE='install.log'
 
-echo "### Beginning install of Redmine ###"
+echo "### Beginning Install ###"
 
 ( # Start log capture
 
 ## Start
 # Install EPEL Package Source
-rpm -Uvh http://download.fedoraproject.org/pub/epel/6/${ARCH}/epel-release-6-7.noarch.rpm
+rpm -Uvh http://download.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6-7.noarch.rpm
 
 # Install base packages
 yum -y install nginx mysql-server ruby rubygem-rack rubygem-rake ruby-mysql subversion
@@ -115,4 +114,4 @@ service nginx start
 
 ) 2>&1 1>> ${LOGFILE} | tee -a ${LOGFILE} # stderr to console, stdout&stderr to logfile
 
-echo "### Install of Redmine complete ###"
+echo "### Install Complete ###"
