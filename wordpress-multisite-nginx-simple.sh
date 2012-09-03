@@ -55,8 +55,22 @@ cat > /etc/nginx/conf.d/${SERVER_NAME}-wordpress.conf << EOF
         server_name_in_redirect off;
         server_name ${SERVER_NAME};
         root    ${WWW_ROOT};
-        index   index.php index.html index.htm;
+        index   index.php index.html index.htm;        
+$(
+if [ $SSL == True ]; then
+cat << EOFA
         
+        # SSL
+        listen 443 default ssl;
+        if ($server_port = 443) { set $https on; }
+        if ($server_port = 80) { set $https off; }
+        
+        ssl_certificate /etc/pki/tls/certs/${SERVER_NAME}.crt;
+        ssl_certificate_key /etc/pki/tls/private/${SERVER_NAME}.key;
+        
+EOFA
+fi
+)        
         # Redirect to naked domain
         if (\$host ~* www\.(.*)) {
             set \$host_without_www \$1;
