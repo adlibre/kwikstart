@@ -33,6 +33,9 @@ rpm -Uvh http://download.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6
 # Install base packages
 yum -y install nginx spawn-fcgi php php-mysql php-gd php-xml php-pecl-apc
 
+# Configure Nginx Permissions
+chgrp nginx /var/lib/php/session/
+
 mkdir -p ${WWW_ROOT}
 
 # turn on services
