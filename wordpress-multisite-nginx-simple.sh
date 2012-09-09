@@ -56,7 +56,7 @@ cat > /etc/nginx/conf.d/${SERVER_NAME}-wordpress.conf << EOF
     server {
         listen  80  default;
         server_name_in_redirect off;
-        server_name ${SERVER_NAME};
+        server_name ${SERVER_NAME} www.${SERVER_NAME};
         root    ${WWW_ROOT};
         index   index.php index.html index.htm;        
 $(
