@@ -116,6 +116,8 @@ EOF
 cp -n /etc/php.ini /etc/php.ini.orig # backup
 sed -i -e "s@^short_open_tag.*@short_open_tag = On@g" /etc/php.ini # Some plugins need this
 sed -i -e "s@^zlib.output_compression.*@zlib.output_compression = Off@g" /etc/php.ini # Turn this off if W3 Total Cache / Lighttpd is handing compression
+sed -i -e "s@^post_max_size.*@post_max_size = 32M@g" /etc/php.ini # Allow for 32M Upload
+sed -i -e "s@^upload_max_filesize.*@upload_max_filesize = 32M@g" /etc/php.ini # Allow for 32M Upload
 
 # Configure APC
 cp -n /etc/php.d/apc.ini /etc/php.d/apc.ini.orig # backup
