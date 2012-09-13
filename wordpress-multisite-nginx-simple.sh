@@ -54,7 +54,7 @@ cat > /etc/nginx/conf.d/${SERVER_NAME}-wordpress.conf << EOF
     # Wordpress Nginx Config for ${SERVER_NAME}
     
     server {
-        listen  80  default;
+        listen  80;
         server_name_in_redirect off;
         server_name ${SERVER_NAME} www.${SERVER_NAME};
         root    ${WWW_ROOT};
@@ -65,8 +65,8 @@ cat << EOFA
         
         # SSL
         listen 443 default ssl;
-        if ($server_port = 443) { set $https on; }
-        if ($server_port = 80) { set $https off; }
+        if (\$server_port = 443) { set $https on; }
+        if (\$server_port = 80) { set $https off; }
         
         ssl_certificate /etc/pki/tls/certs/${SERVER_NAME}.crt;
         ssl_certificate_key /etc/pki/tls/private/${SERVER_NAME}.key;
