@@ -146,7 +146,7 @@ fi
 
 # Example zone config
 cat > /var/named/chroot/var/named/data/example.com.zone << EOF
-$TTL 38400      ; 10 hours 40 minutes
+\$TTL 38400      ; 10 hours 40 minutes
 example.com.    IN SOA  ${SOA_HOSTNAME}. hostmaster.example.com. (
                                 2012020101 ; serial
                                 10800      ; refresh (3 hours)
