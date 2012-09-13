@@ -65,8 +65,8 @@ cat << EOFA
         
         # SSL
         listen 443 default ssl;
-        if (\$server_port = 443) { set $https on; }
-        if (\$server_port = 80) { set $https off; }
+        if (\$server_port = 443) { set \$https on; }
+        if (\$server_port = 80) { set \$https off; }
         
         ssl_certificate /etc/pki/tls/certs/${SERVER_NAME}.crt;
         ssl_certificate_key /etc/pki/tls/private/${SERVER_NAME}.key;
