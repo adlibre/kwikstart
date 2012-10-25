@@ -25,7 +25,7 @@ echo "### Beginning Install ###"
 
 ## Start
 # Install EPEL Package Source
-rpm -Uvh http://download.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6-7.noarch.rpm
+rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-7.noarch.rpm
 
 # Install base packages
 yum -y install nginx mysql-server ruby rubygem-rack rubygem-rake ruby-mysql subversion
@@ -41,7 +41,8 @@ echo "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost' IDENTIFIE
 echo "FLUSH PRIVILEGES;" | mysql
 
 # Install Redmine from svn stable
-adduser -d ${DEST} -m ${USER}
+mkdir -p ${DEST}
+adduser -d ${DEST} -M ${USER}
 cd ${DEST}
 svn co -q http://redmine.rubyforge.org/svn/branches/2.0-stable ./
 # Dependent packages to build Redmine
