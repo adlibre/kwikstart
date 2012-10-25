@@ -103,7 +103,7 @@ cat > /etc/nginx/conf.d/redmine.conf << EOF
 EOF
 
 # Install & Configure Thin
-yum install rubygem-thin
+yum -y install rubygem-thin
 mkdir -p /etc/thin/
 thin config -C /etc/thin/redmine.yml -c ${DEST} --servers ${SERVERS} -e production -u ${USER} -g ${USER} -p 8000
 thin install

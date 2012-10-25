@@ -47,6 +47,7 @@ cd ${DEST}
 svn co -q http://redmine.rubyforge.org/svn/branches/2.0-stable ./
 # Dependent packages to build Redmine
 yum -y install ruby-devel make gcc mysql-devel postgresql-devel ImageMagick-devel sqlite-devel
+gem install bundler
 bundle install --without development test
 
 # Configure redmine (as per doc/INSTALL)
@@ -103,7 +104,7 @@ cat > /etc/nginx/conf.d/redmine.conf << EOF
 EOF
 
 # Install & Configure Thin
-yum install rubygem-thin
+yum -y install rubygem-thin
 mkdir -p /etc/thin/
 thin config -C /etc/thin/redmine.yml -c ${DEST} --servers ${SERVERS} -e production -u ${USER} -g ${USER} -p 8000
 thin install
