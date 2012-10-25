@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Install Redmine 2.0 w/ MySQL, Nginx (w/ Thin) on CentOS 6
+# Install Redmine 1.4 w/ MySQL, Nginx (w/ Thin) on CentOS 6
 #
 # Assumes the host is clean unconfigured CentOS 6. Should be idempotent.
 #
