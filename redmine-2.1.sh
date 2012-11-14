@@ -24,8 +24,10 @@ echo "### Beginning Install ###"
 ( # Start log capture
 
 ## Start
-# Install EPEL Package Source
-rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-7.noarch.rpm
+# Install EPEL Package Source if not Amazon AMI
+if grep -qv Amazon /etc/system-release 2> /dev/null; then
+    rpm -Uvh http://download.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6-7.noarch.rpm
+fi
 
 # Install base packages
 yum -y install nginx mysql-server ruby rubygem-rack rubygem-rake ruby-mysql subversion
