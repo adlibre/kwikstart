@@ -105,7 +105,7 @@ tar -xjf /tmp/phpmyadmin-latest.tar.bz2 -C ${WWW_ROOT} && rm -f /tmp/phpmyadmin-
 
 if [ $REQUIRE_AUTH == True ]; then
     htpasswd -b -c /etc/nginx/htpasswd ${USERNAME} ${PASSWORD}
-    echo "Username / Password is ${USERNAME} / $PASSWORD"
+    echo "Username / Password is ${USERNAME} / $PASSWORD" 1>&2
 fi
 
 # Start / Restart
