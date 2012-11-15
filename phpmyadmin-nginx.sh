@@ -10,6 +10,9 @@
 ## Configuration
 SERVER_NAME="phpmyadmin.`hostname`"
 WWW_ROOT="/srv/www/${SERVER_NAME}"
+REQUIRE_AUTH=True
+USERNAME='phpmyadmin'
+PASSWORD=`tr -cd "[:alnum:]" < /dev/urandom | head -c 10` # 10 char random password
 SSL=False
 
 ## Constants
@@ -47,7 +50,19 @@ cat << EOFA
         
 EOFA
 fi
-)       
+)
+
+$(
+if [ $REQUIRE_AUTH == True ]; then
+cat << EOFA
+        
+        # Require Auth
+        auth_basic            "Restricted";
+        auth_basic_user_file  /srv/www/htpasswd;
+        
+EOFA
+fi
+)
         # Output compression
         gzip on;
         gzip_disable "msie6";
@@ -87,6 +102,11 @@ EOF
 # Install phpMyAdmin
 wget -q http://sourceforge.net/projects/phpmyadmin/files/latest/download -O /tmp/phpmyadmin-latest.tar.bz2 && \
 tar -xjf /tmp/phpmyadmin-latest.tar.bz2 -C ${WWW_ROOT} && rm -f /tmp/phpmyadmin-latest.tar.bz2
+
+if [ $REQUIRE_AUTH == True ]; then
+    htpasswd -b -c /srv/www/htpasswd ${USERNAME} ${PASSWORD}
+    echo "Username / Password is ${USERNAME} / $PASSWORD"
+fi
 
 # Start / Restart
 service spawn-fcgi restart
