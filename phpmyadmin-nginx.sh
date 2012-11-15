@@ -58,7 +58,7 @@ cat << EOFA
         
         # Require Auth
         auth_basic            "Restricted";
-        auth_basic_user_file  /srv/www/htpasswd;
+        auth_basic_user_file  /etc/nginx/htpasswd;
         
 EOFA
 fi
@@ -104,7 +104,7 @@ wget -q http://sourceforge.net/projects/phpmyadmin/files/latest/download -O /tmp
 tar -xjf /tmp/phpmyadmin-latest.tar.bz2 -C ${WWW_ROOT} && rm -f /tmp/phpmyadmin-latest.tar.bz2
 
 if [ $REQUIRE_AUTH == True ]; then
-    htpasswd -b -c /srv/www/htpasswd ${USERNAME} ${PASSWORD}
+    htpasswd -b -c /etc/nginx/htpasswd ${USERNAME} ${PASSWORD}
     echo "Username / Password is ${USERNAME} / $PASSWORD"
 fi
 
