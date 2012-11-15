@@ -8,9 +8,9 @@
 #
 
 ## Configuration
+SERVER_NAME=`hostname -d`
+WWW_ROOT="/srv/www/${SERVER_NAME}"
 USER='redmine'
-DEST='/srv/www/redmine'
-SERVER_NAME=`hostname`
 
 ## Constants
 DB_USER='redmine'
@@ -43,9 +43,9 @@ echo "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost' IDENTIFIE
 echo "FLUSH PRIVILEGES;" | mysql
 
 # Install Redmine from svn stable
-mkdir -p ${DEST}
-adduser -d ${DEST} -M ${USER}
-cd ${DEST}
+mkdir -p ${WWW_ROOT}
+adduser -d ${WWW_ROOT} -M ${USER}
+cd ${WWW_ROOT}
 svn co -q http://redmine.rubyforge.org/svn/branches/2.1-stable ./
 # Dependent packages to build Redmine
 yum -y install ruby-devel make gcc mysql-devel postgresql-devel ImageMagick-devel sqlite-devel
@@ -53,7 +53,7 @@ gem install bundler
 bundle install --without development test
 
 # Configure redmine (as per doc/INSTALL)
-cd ${DEST}
+cd ${WWW_ROOT}
 cp config/configuration.yml.example config/configuration.yml # This will require customisation   
 
 cat > config/database.yml << EOF
@@ -69,8 +69,8 @@ EOF
 rake generate_secret_token
 rake db:migrate RAILS_ENV="production" # create database
 # fix permissions
-chown -R root:root ${DEST}
-chmod 755 ${DEST}
+chown -R root:root ${WWW_ROOT}
+chmod 755 ${WWW_ROOT}
 mkdir -p public/plugin_assets # make missing dir
 chown -R ${USER}:${USER} files log tmp public/plugin_assets
 chmod -R 755 files log tmp public/plugin_assets
@@ -88,7 +88,7 @@ cat > /etc/nginx/conf.d/redmine.conf << EOF
 
     server {
         server_name ${SERVER_NAME};
-        root ${DEST}/public;
+        root ${WWW_ROOT}/public;
 
         location / {
             try_files \$uri @ruby;
@@ -108,7 +108,7 @@ EOF
 # Install & Configure Thin
 yum -y install rubygem-thin
 mkdir -p /etc/thin/
-thin config -C /etc/thin/redmine.yml -c ${DEST} --servers ${SERVERS} -e production -u ${USER} -g ${USER} -p 8000
+thin config -C /etc/thin/redmine.yml -c ${WWW_ROOT} --servers ${SERVERS} -e production -u ${USER} -g ${USER} -p 8000
 thin install
 chkconfig thin on
 

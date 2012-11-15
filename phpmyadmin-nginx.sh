@@ -8,7 +8,7 @@
 #
 
 ## Configuration
-SERVER_NAME="phpmyadmin.`hostname`"
+SERVER_NAME="phpmyadmin.`hostname -d`"
 WWW_ROOT="/srv/www/${SERVER_NAME}"
 REQUIRE_AUTH=True
 USERNAME='phpmyadmin'

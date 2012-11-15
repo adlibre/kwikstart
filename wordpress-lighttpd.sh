@@ -8,8 +8,8 @@
 #
 
 ## Configuration
-WWW_ROOT='/srv/www'
-SERVER_NAME=`hostname`
+SERVER_NAME=`hostname -d`
+WWW_ROOT="/srv/www/${SERVER_NAME}"
 APC_SHM_SIZE='256M'
 # APC: use 0, 600, 600 to flush cache in case of APC memory exhaustion (prevents fragmentation too) 
 APC_TTL=0 
