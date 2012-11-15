@@ -85,7 +85,7 @@ fi
 EOF
 
 # Install phpMyAdmin
-wget http://sourceforge.net/projects/phpmyadmin/files/latest/download -O /tmp/phpmyadmin-latest.tar.bz2 && \
+wget -q http://sourceforge.net/projects/phpmyadmin/files/latest/download -O /tmp/phpmyadmin-latest.tar.bz2 && \
 tar -xjf /tmp/phpmyadmin-latest.tar.bz2 -C ${WWW_ROOT} && rm -f /tmp/phpmyadmin-latest.tar.bz2
 
 # Start / Restart
