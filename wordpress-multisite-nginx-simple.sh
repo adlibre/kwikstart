@@ -16,7 +16,7 @@ SSL=False
 APC_TTL=0 
 APC_USER_TTL=600
 APC_GC_TTL=600
-PHP_FCGI_CHILDREN=8
+PHP_FCGI_CHILDREN='$(expr 4 \* `nproc`)' # Autoscale based on number of cpu's on startup or hardcode to fix.
 PHP_FCGI_MAX_REQUESTS=1000
 
 ## Constants
