@@ -161,6 +161,7 @@ fi
             fastcgi_index index.php;
             fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
             fastcgi_read_timeout 300; # increase timeout since our mysql is on different servers
+            fastcgi_param HTTPS $https;
         }
         
         # Don't serve .htaccess, .svn or .git
