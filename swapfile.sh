@@ -22,7 +22,7 @@ echo "### Beginning Install ###"
 
 # If already exists allow us to resize.
 if [ ! -f ${SWAP_FILE} ]; then
-    echo "${SWAP_FILE}              swap                    swap    defaults        0 0" >> /etc/fstab
+    echo "${SWAP_FILE}              none                    swap    defaults        0 0" >> /etc/fstab
     touch ${SWAP_FILE}
 else
     swapoff ${SWAP_FILE}
