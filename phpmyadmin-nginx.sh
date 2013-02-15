@@ -42,8 +42,6 @@ cat << EOFA
         
         # SSL
         listen 443 default ssl;
-        if (\$server_port = 443) { set \$https on; }
-        if (\$server_port = 80) { set \$https off; }
         
         ssl_certificate /etc/pki/tls/certs/${SERVER_NAME}.crt;
         ssl_certificate_key /etc/pki/tls/private/${SERVER_NAME}.key;
@@ -51,6 +49,9 @@ cat << EOFA
 EOFA
 fi
 )
+
+        if (\$server_port = 443) { set \$https on; }
+        if (\$server_port = 80) { set \$https off; }
 
 $(
 if [ $REQUIRE_AUTH == True ]; then
@@ -90,7 +91,7 @@ fi
             fastcgi_index index.php;
             fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
             fastcgi_read_timeout 300; # increase timeout incase our mysql is on different servers
-            fastcgi_param HTTPS $https;
+            fastcgi_param HTTPS \$https;
         }
 
         # Don't serve .htaccess, .svn or .git
