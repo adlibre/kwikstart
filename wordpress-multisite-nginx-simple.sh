@@ -89,7 +89,7 @@ fi
         gzip_vary on;
         gzip_comp_level 5;
         gzip_proxied any;
-        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_types text/css text/x-component application/x-javascript application/javascript text/javascript text/x-js text/richtext image/svg+xml text/plain text/xsd text/xsl text/xml image/x-icon;
         gzip_buffers 16 8k;
         
         # Max file upload
