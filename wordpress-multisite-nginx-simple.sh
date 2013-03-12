@@ -35,9 +35,6 @@ fi
 # Install base packages
 yum -y install nginx spawn-fcgi php php-mysql php-gd php-xml php-pecl-apc
 
-# Configure Nginx Permissions
-chgrp nginx /var/lib/php/session/
-
 mkdir -p ${WWW_ROOT}
 
 # turn on services
@@ -178,6 +175,12 @@ sed -i -e "s@^short_open_tag.*@short_open_tag = On@g" /etc/php.ini # Some plugin
 sed -i -e "s@^zlib.output_compression.*@zlib.output_compression = Off@g" /etc/php.ini # Turn this off if W3 Total Cache / Nginx is handing compression
 sed -i -e "s@^post_max_size.*@post_max_size = 32M@g" /etc/php.ini # Allow for 32M Upload
 sed -i -e "s@^upload_max_filesize.*@upload_max_filesize = 32M@g" /etc/php.ini # Allow for 32M Upload
+sed -i -e "s@^session.save_path.*@session.save_path = "/var/lib/nginx/session"@g" /etc/php.ini # Move session to dir owned by Nginx
+
+# Configure PHP Session directory
+mkdir /var/lib/nginx/session
+chmod 770 /var/lib/nginx/session
+chown root:nginx /var/lib/nginx/session
 
 # Configure APC
 cp -n /etc/php.d/apc.ini /etc/php.d/apc.ini.orig # backup
