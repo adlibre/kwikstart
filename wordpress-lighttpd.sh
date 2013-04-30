@@ -28,7 +28,7 @@ echo "### Beginning Install ###"
 ## Start
 # Install EPEL Package Source if not Amazon AMI
 if grep -qv Amazon /etc/system-release 2> /dev/null; then
-    rpm -Uvh http://download.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6-7.noarch.rpm
+    rpm -Uvh http://download.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6-8.noarch.rpm
 fi
 
 # Install base packages
