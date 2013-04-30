@@ -182,7 +182,7 @@ sed -i -e "s@^upload_max_filesize.*@upload_max_filesize = 32M@g" /etc/php.ini # 
 sed -i -e "s@^session.save_path.*@session.save_path = "/var/lib/nginx/session"@g" /etc/php.ini # Move session to dir owned by Nginx
 
 # Configure PHP Session directory
-mkdir /var/lib/nginx/session
+mkdir -p /var/lib/nginx/session
 chmod 770 /var/lib/nginx/session
 chown root:nginx /var/lib/nginx/session
 
