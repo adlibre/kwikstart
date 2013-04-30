@@ -64,8 +64,6 @@ cat << EOFA
         
         # SSL
         listen 443 default ssl;
-        if (\$server_port = 443) { set \$https on; }
-        if (\$server_port = 80) { set \$https off; }
 
         # SSL BEAST mitigation
         ssl_ciphers RC4:HIGH:!aNULL:!MD5;
@@ -76,7 +74,10 @@ cat << EOFA
         
 EOFA
 fi
-)        
+)
+        if (\$server_port = 443) { set \$https on; }
+        if (\$server_port = 80) { set \$https off; }
+        
         # Redirect to naked domain
         if (\$host ~* www\.(.*)) {
             set \$host_without_www \$1;
