@@ -94,7 +94,6 @@ symbolic-links = 0
 
 key_buffer_size = 512M
 max_allowed_packet = 8M
-table_open_cache = 512
 sort_buffer_size = 2M
 read_buffer_size = 2M
 read_rnd_buffer_size = 8M
