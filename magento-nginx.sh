@@ -35,7 +35,7 @@ if grep -qv Amazon /etc/system-release 2> /dev/null; then
 fi
 
 # Install base packages
-yum -y install nginx php-fpm php php-mysql php-gd php-xml php-pecl-apc
+yum -y install nginx php-fpm php php-mysql php-gd php-xml php-pecl-apc php-soap
 
 mkdir -p ${WWW_ROOT}
 
