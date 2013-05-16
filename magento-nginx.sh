@@ -51,7 +51,7 @@ sed -i -e 's@^user =.*$@user = nginx@g' /etc/php-fpm.d/www.conf
 sed -i -e 's@^group =.*$@group = nginx@g' /etc/php-fpm.d/www.conf
 sed -i -e 's@^pm.max_children =.*$@pm.max_children = 12@g' /etc/php-fpm.d/www.conf
 sed -i -e 's@^pm.max_spare_servers =.*$@pm.max_spare_servers = 5@g' /etc/php-fpm.d/www.conf
-sed -i -e 's@^;pm.max_requests =.*$@pm.max_requests = $PHP_FCGI_MAX_REQUESTS@g' /etc/php-fpm.d/www.conf
+sed -i -e "s@^;pm.max_requests =.*\$@pm.max_requests = ${PHP_FCGI_MAX_REQUESTS}@g" /etc/php-fpm.d/www.conf
 sed -i -e 's@^php_value[session.save_path] =.*$@php_value[session.save_path] = /var/lib/nginx/session@g' /etc/php-fpm.d/www.conf
 
 sed -i -e 's@^;emergency_restart_threshold =.*$@emergency_restart_threshold = 1@g' /etc/php-fpm.conf 
@@ -105,56 +105,56 @@ fi
         
         # Max file upload
         client_max_body_size 32M;
-		
-		location / {
-			index index.html index.php; ## Allow a static html file to be shown first
-			try_files $uri $uri/ @handler; ## If missing pass the URI to Magento's front handler
-			expires 30d; ## Assume all files are cachable
-		}
-		
+        
+        location / {
+            index index.html index.php; ## Allow a static html file to be shown first
+            try_files $uri $uri/ @handler; ## If missing pass the URI to Magento's front handler
+            expires 30d; ## Assume all files are cachable
+        }
+        
         # Static content 
         location ~* ^.+\.(css|ico|js|png|gif|jpg|jpeg)$ {
             access_log off;
             expires max;
         }
         
-		## These locations would be hidden by .htaccess normally
-		location ^~ /app/                { deny all; }
-		location ^~ /includes/           { deny all; }
-		location ^~ /lib/                { deny all; }
-		location ^~ /media/downloadable/ { deny all; }
-		location ^~ /pkginfo/            { deny all; }
-		location ^~ /report/config.xml   { deny all; }
-		location ^~ /var/                { deny all; }
-		
-		location /var/export/ { ## Allow admins only to view export folder
-			auth_basic           "Restricted"; ## Message shown in login window
-			auth_basic_user_file htpasswd; ## See /etc/nginx/htpasswd
-			autoindex            on;
-		}
-		
-		location  /. { ## Disable .htaccess and other hidden files
-			return 404;
-		}
-	 
-		location @handler { ## Magento uses a common front handler
-			rewrite / /index.php;
-		}
-	 
-		location ~ .php/ { ## Forward paths like /js/index.php/x.js to relevant handler
-			rewrite ^(.*.php)/ $1 last;
-		}	
+        ## These locations would be hidden by .htaccess normally
+        location ^~ /app/                { deny all; }
+        location ^~ /includes/           { deny all; }
+        location ^~ /lib/                { deny all; }
+        location ^~ /media/downloadable/ { deny all; }
+        location ^~ /pkginfo/            { deny all; }
+        location ^~ /report/config.xml   { deny all; }
+        location ^~ /var/                { deny all; }
+        
+        location /var/export/ { ## Allow admins only to view export folder
+            auth_basic           "Restricted"; ## Message shown in login window
+            auth_basic_user_file htpasswd; ## See /etc/nginx/htpasswd
+            autoindex            on;
+        }
+        
+        location  /. { ## Disable .htaccess and other hidden files
+            return 404;
+        }
+     
+        location @handler { ## Magento uses a common front handler
+            rewrite / /index.php;
+        }
+     
+        location ~ .php/ { ## Forward paths like /js/index.php/x.js to relevant handler
+            rewrite ^(.*.php)/ $1 last;
+        }   
         
         # Pass PHP scripts on to PHP-FASTCGI
         location ~ \.php$ {
-			if (!-e $request_filename) { rewrite / /index.php last; } ## Catch 404s that try_files miss
+            if (!-e \$request_filename) { rewrite / /index.php last; } ## Catch 404s that try_files miss
             include /etc/nginx/fastcgi_params;
             fastcgi_pass  127.0.0.1:9000;
             fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
             fastcgi_read_timeout 300; # increase timeout since our mysql is on different servers
             fastcgi_param HTTPS \$https;
-			fastcgi_param  MAGE_RUN_CODE default; ## Store code is defined in administration > Configuration > Manage Stores
-			fastcgi_param  MAGE_RUN_TYPE store;
+            fastcgi_param  MAGE_RUN_CODE default; ## Store code is defined in administration > Configuration > Manage Stores
+            fastcgi_param  MAGE_RUN_TYPE store;
         }
         
     }
@@ -181,7 +181,7 @@ sed -i -e "s@^apc.user_ttl=.*@apc.user_ttl=${APC_USER_TTL}@g" /etc/php.d/apc.ini
 sed -i -e "s@^apc.gc_ttl=.*@apc.gc_ttl=${APC_GC_TTL}@g" /etc/php.d/apc.ini
 
 # Start / Restart
-service spawn-fcgi restart
+service php-fpm restart
 service nginx restart
 
 ) 2>&1 1>> ${LOGFILE} | tee -a ${LOGFILE} # stderr to console, stdout&stderr to logfile
