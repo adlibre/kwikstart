@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Install MySQL for Wordpress Multisite
+# Install MySQL. Including a config tweek for Wordpress Multisite performance
 #
 # Assumes the host is clean unconfigured CentOS 6 / EL 6 derivatives (inc Amazon Linux AMI). Should be idempotent.
 #
@@ -101,7 +101,7 @@ myisam_sort_buffer_size = 64M
 thread_cache_size = 8
 query_cache_size = 32M
 
-# Multisite important config
+# Wordpress Multisite important config
 table_cache = 16384
 table_definition_cache = 16384
 
