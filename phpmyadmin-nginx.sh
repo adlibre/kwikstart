@@ -23,7 +23,7 @@ echo "### Beginning Install ###"
 ( # Start log capture
 
 ## Start
-
+yum -y install php-mbstring php-mcrypt # install php modules that might be missing
 mkdir -p ${WWW_ROOT}
 
 # Configure Nginx vhost
