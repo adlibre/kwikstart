@@ -52,7 +52,7 @@ sed -i -e 's@^group =.*$@group = nginx@g' /etc/php-fpm.d/www.conf
 sed -i -e 's@^pm.max_children =.*$@pm.max_children = 12@g' /etc/php-fpm.d/www.conf
 sed -i -e 's@^pm.max_spare_servers =.*$@pm.max_spare_servers = 5@g' /etc/php-fpm.d/www.conf
 sed -i -e "s@^;pm.max_requests =.*\$@pm.max_requests = ${PHP_FCGI_MAX_REQUESTS}@g" /etc/php-fpm.d/www.conf
-sed -i -e 's@^php_value[session.save_path] =.*$@php_value[session.save_path] = /var/lib/nginx/session@g' /etc/php-fpm.d/www.conf
+sed -i -e 's@^php_value\[session.save_path\] =.*$@php_value\[session.save_path\] = /var/lib/nginx/session@g' /etc/php-fpm.d/www.conf
 
 sed -i -e 's@^;emergency_restart_threshold =.*$@emergency_restart_threshold = 1@g' /etc/php-fpm.conf 
 sed -i -e 's@^;emergency_restart_interval =.*$@emergency_restart_interval = 1m@g' /etc/php-fpm.conf 
