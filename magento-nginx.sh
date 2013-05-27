@@ -108,7 +108,7 @@ fi
         
         location / {
             index index.html index.php; ## Allow a static html file to be shown first
-            try_files $uri $uri/ @handler; ## If missing pass the URI to Magento's front handler
+            try_files \$uri \$uri/ @handler; ## If missing pass the URI to Magento's front handler
             expires 30d; ## Assume all files are cachable
         }
         
