@@ -142,7 +142,7 @@ fi
         }
      
         location ~ .php/ { ## Forward paths like /js/index.php/x.js to relevant handler
-            rewrite ^(.*.php)/ $1 last;
+            rewrite ^(.*.php)/ \$1 last;
         }   
         
         # Pass PHP scripts on to PHP-FASTCGI
