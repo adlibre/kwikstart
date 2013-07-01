@@ -130,7 +130,9 @@ adduser -d ${WWW_ROOT} -M ${USER}
 # Configure Apache
 cp -n /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.orig # backup
 sed -i -e "s@^ServerTokens.*@ServerTokens Prod@g" /etc/httpd/conf/httpd.conf
-sed -i -e "s@^#NameVirtualHost *:80@NameVirtualHost *:80@g" /etc/httpd/conf/httpd.conf # enable name based vhosts
+sed -i -e "s@^KeepAlive Off@KeepAlive On@g" /etc/httpd/conf/httpd.conf
+sed -i -e "s@^KeepAliveTimeout .*@KeepAliveTimeout 5@g" /etc/httpd/conf/httpd.conf
+sed -i -e "s@^#NameVirtualHost \*:80@NameVirtualHost \*:80@g" /etc/httpd/conf/httpd.conf # enable name based vhosts
 
 cat > /etc/httpd/conf.d/${SERVER_NAME}.conf << EOF
 #
