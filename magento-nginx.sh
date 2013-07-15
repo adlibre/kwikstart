@@ -133,6 +133,10 @@ fi
             autoindex            on;
         }
         
+        location /RELEASE_NOTES.txt { ## Prevent disclosure of the installed Magento version
+            return 404;    
+        }
+        
         location  /. { ## Disable .htaccess and other hidden files
             return 404;
         }
