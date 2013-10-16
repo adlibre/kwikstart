@@ -23,6 +23,15 @@ if grep -qv Amazon /etc/system-release 2> /dev/null; then
     rpm -Uvh http://download.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6-8.noarch.rpm
 fi
 
+# Install Nginx Repo
+cat > /etc/yum.repos.d/nginx.repo << EOF
+[nginx]
+name=Nginx Official Repository
+baseurl=http://nginx.org/packages/$(awk '{print tolower($1)}' < /etc/redhat-release)/6/\$basearch/
+gpgcheck=0
+enabled=1
+EOF
+
 # Install base packages
 yum -y install nginx
 
