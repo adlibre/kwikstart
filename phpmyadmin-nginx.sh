@@ -44,7 +44,7 @@ cat << EOFA
         listen 443 default ssl;
 
         # SSL BEAST mitigation
-        ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+        ssl_ciphers HIGH:!aNULL:!MD5;
         ssl_prefer_server_ciphers on;
         
         ssl_certificate /etc/pki/tls/certs/${SERVER_NAME}.crt;
