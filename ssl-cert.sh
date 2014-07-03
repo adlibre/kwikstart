@@ -8,7 +8,7 @@
 #
 
 ## Configuration
-DOMAIN_NAME=`hostname -d`
+DOMAIN_NAME=$1
 KEY_SIZE='2048'
 
 ## Constants
@@ -19,6 +19,12 @@ CSR_FILE="/etc/pki/tls/certs/${DOMAIN_NAME}.csr"
 echo "### Beginning Install ###"
 
 ( # Start log capture
+
+# If not set
+if [ -z ${DOMAIN_NAME} ]; then
+    echo "Domain name not set. Usage: ./ssl-cert.sh <domain>"
+    exit
+fi
 
 ## Start
 
